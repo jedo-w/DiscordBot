@@ -1,1 +1,1 @@
-# DiscordBoto
+# Discord.js bot
