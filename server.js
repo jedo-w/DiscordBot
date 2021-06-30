@@ -76,7 +76,7 @@ const timerID = function() {
     console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
   }, 2000); //every 2sec
 };
-setInterval(timerID, 10000); //every 60sec run function timerID
+setInterval(timerID, 60000); //every 60sec run function timerID
 
 //LISTEN MESSAGE HERE
 client.on("message", msg => {
@@ -88,31 +88,44 @@ client.on("message", msg => {
   if (msg.author.id == client.user.id) {
     return;
   }
-  //TIMER SET INTERVAL(just for test)
-  //redord the message...?
+  //TIMER SET INTERVAL
+  //just for test to see how sec moving
+  //when message noticed,here will send message to another channel
+  //and reply the same message...
+  //WAIT FOR ONE SECOND
+  console.log("sec[9]:" + sec);
   var sec = 0;
+  console.log("sec[1]:" + sec);
   const timerID = setInterval(function() {
+    console.log("sec[2]:" + sec);
     sec = sec + 1;
+    console.log("sec[3]:" + sec);
     client.channels
       .get(process.env.CHANNEL_ID)
       .send(
         msg.author +
           " " +
           sec +
-          " sec◆ " +
+          " time◆ " +
           "\n You said:『" +
           msg +
           "』\n" +
           Math.random()
       ); //send message to the channel
-    if (sec >= 1) {
-      clearInterval(timerID); //clear timer
+    console.log("sec[4]:" + sec);
+    if (sec >= 10) {
+      console.log("sec[5]:" + sec);
+      clearInterval(timerID); //if one sec passed the clear timer
+      console.log("sec[6]:" + sec);
     }
-  }, 1000);
+    console.log("sec[7]:" + sec);
+  }, sec * 1000); //wait for 0-4 seconds.
+  console.log("sec[8]:" + sec);
+
   //push pop maps here
   if (msg.content.startsWith("add")) {
     var startTime = Date.now();
-    msg.channel.send("msg'timestamp:" + msg.createdTimestamp); //created message timestamp
+    msg.channel.send("msg timestamp:" + msg.createdTimestamp); //created message timestamp
     msg.channel.send("added!" + "date is   :" + `${Date.now()}`); //UTC time
     var ping = startTime - msg.createdTimestamp;
     sendReply(msg, "Add what?" + "\nyour message ping is " + ping + "ms");
@@ -121,19 +134,41 @@ client.on("message", msg => {
     return;
   }
   if (msg.content === "mapadd") {
+    //check the response time start
+    var startTime = Date.now();
+    msg.channel.send("msg timestamp:" + msg.createdTimestamp); //created message timestamp
+    msg.channel.send("added!" + "date is   :" + `${Date.now()}`); //UTC time
+
+    //array.push
     maps.push("DK", "ELDER");
     //do shome array option here. delete or rename the list.
-    console.log(maps.length);
-    console.log(maps);
+    console.log("array length:" + maps.length);
+    console.log("array:" + maps);
+
+    //check ping time send to channel
+    var ping = startTime - msg.createdTimestamp;
+    msg.channel.send(
+      "maps length: " + `${maps.length}` + "\narray is   :\n" + `${maps}`
+    );
+    //array.forEach
+    maps.forEach(function(item, index, array) {
+      console.log(index, item); //繰り返す文
+      //msg.channel.send(`${index}` + " " + `${item}`); //lag very slow...
+    });
+    msg.channel.send(Object.keys(maps)); //lag very slow...
+    msg.channel.send(maps.indexOf("DK")); //
+
+    //end of ping time
+
+    sendReply(msg, "map added!" + "\nyour message ping is " + ping + "ms");
     return;
   }
   if (msg.content === "maps") {
     //  let map = maps[0];
-    msg.channel.send(msg);
+    msg.channel.send(`${maps}`);
     // maps.forEach(function(item, index, array) {
     //   console.log(item, index);
     // });
-
     //console.log("PUSH:" + maps.length);
     console.log("maps[]:" + maps.length);
     console.log(maps[0], maps[1], maps[2], maps[3], maps[4]);
