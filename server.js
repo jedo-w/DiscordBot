@@ -2,6 +2,7 @@ const http = require("http");
 const querystring = require("querystring");
 const discord = require("discord.js");
 const client = new discord.Client(); //the bot
+
 //HTTP SERVER HRER
 http
   .createServer(function(req, res) {
@@ -33,28 +34,49 @@ http
   .listen(3000);
 
 //LOGIN CHECK HERE
-client.once("ready", () => {
-  console.log(`Bot ready down! @ ${client.user.tag}`);
-  client.user.setPresence({ game: { name: "◆!help" } }); //the player status
+client.on("ready", () => {
+  console.log(`Bot ready down! @ ${client.user.tag}`); //show log
+  client.user.setPresence({ game: { name: "◆!help" } }); //the bot'status
 });
-//CLEAR INIT HERE
+//VAR WILL BE INIT HERE
 // thinking...
+//ARRAY match the message maps
+let maps = ["AG", "KURTS", "PX"]; //need put this array to a DATABASE.
+
 //TIMER INTERVAL HERE
-var sec = 1;
+
+var sec = 0;
+var random = Math.random();
 const timerID = function() {
   //function code here
-  sec = sec + 1;
-  console.log("foo:" + sec + "◆" + Math.random());
+  sec = sec + 1; //take a sec
+  console.log(
+    "foo:" +
+      sec +
+      " sec up" +
+      "\n◆" +
+      Math.random() +
+      "\nmaps:" +
+      maps.length +
+      "\nrandom:" +
+      random
+  );
   //client.channels.get(CHANNEL_ID).send("hello world")
   client.channels
     .get(process.env.CHANNEL_ID)
-    .send("◆Passing time is \n" + sec * 10 + " sec \n◆Take a break◆");
-  //show boss time here
+    .send("◆uptime is " + sec * 10 + " sec" + "\n◆maps:" + maps.length);
+  //show boss list and time here
   //
   //
+  //test Date.now
+  const startTime = Date.now();
+  console.log("stating time..." + startTime);
+  setTimeout(() => {
+    const millis = Date.now() - startTime;
+    console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
+  }, 2000); //every 2sec
 };
-//run function timerID
-setInterval(timerID, 10000); //60sec
+setInterval(timerID, 10000); //every 60sec run function timerID
 
 //LISTEN MESSAGE HERE
 client.on("message", msg => {
@@ -67,17 +89,57 @@ client.on("message", msg => {
     return;
   }
   //TIMER SET INTERVAL(just for test)
-  var sec = 1;
+  //redord the message...?
+  var sec = 0;
   const timerID = setInterval(function() {
     sec = sec + 1;
     client.channels
       .get(process.env.CHANNEL_ID)
-      .send(msg.author + "say:" + sec + "sec◆" + Math.random()); //send message to the channel
-    if (sec >= 10) {
+      .send(
+        msg.author +
+          " " +
+          sec +
+          " sec◆ " +
+          "\n You said:『" +
+          msg +
+          "』\n" +
+          Math.random()
+      ); //send message to the channel
+    if (sec >= 1) {
       clearInterval(timerID); //clear timer
     }
   }, 1000);
+  //push pop maps here
+  if (msg.content.startsWith("add")) {
+    var startTime = Date.now();
+    msg.channel.send("msg'timestamp:" + msg.createdTimestamp); //created message timestamp
+    msg.channel.send("added!" + "date is   :" + `${Date.now()}`); //UTC time
+    var ping = startTime - msg.createdTimestamp;
+    sendReply(msg, "Add what?" + "\nyour message ping is " + ping + "ms");
 
+    //if add match "DK" then push it into maps[]
+    return;
+  }
+  if (msg.content === "mapadd") {
+    maps.push("DK", "ELDER");
+    //do shome array option here. delete or rename the list.
+    console.log(maps.length);
+    console.log(maps);
+    return;
+  }
+  if (msg.content === "maps") {
+    //  let map = maps[0];
+    msg.channel.send(msg);
+    // maps.forEach(function(item, index, array) {
+    //   console.log(item, index);
+    // });
+
+    //console.log("PUSH:" + maps.length);
+    console.log("maps[]:" + maps.length);
+    console.log(maps[0], maps[1], maps[2], maps[3], maps[4]);
+    //msg.member.roles.cache.map(role=>role.name);
+    return;
+  }
   if (msg.isMemberMentioned(client.user)) {
     //function here
     sendReply(msg, "Did you call me?!");
@@ -101,7 +163,8 @@ client.on("message", msg => {
     Hi,${msg.author}
     form:${client.users.get(msg.author.id).username}◆!!
     I am ${client.user.tag}.
-    Here is #Channel# ${client.channels.get(process.env.CHANNEL_ID).name}`); //send to target channel
+    Here is #Channel# ${client.channels.get(process.env.CHANNEL_ID).name}
+    `); //send to target channel
     //write msg name & message & time to google spreed sheet
     return;
   }
@@ -110,35 +173,28 @@ client.on("message", msg => {
     const Responses = ["グー", "チョキ", "パー"];
     const Answer = Math.floor(Math.random() * Responses.length);
 
-    console.log(Responses); //array
-    console.log(Math.random()); //use Math.random() to get a random floating point number.
-    console.log(Math.floor(Math.random() * Responses.length)); //use Math.floor() to get a integer.
-    console.log(Responses[Answer]); //Answer will be 0,1,2,3 that length of Responses array.
-
+    console.log("Array:" + Responses); //array
+    console.log("random:" + Math.random()); //use Math.random() to get a random floating point number.
+    console.log("Floor:" + Math.floor(Math.random() * Responses.length)); //use Math.floor() to get a integer.
+    console.log("Answer:" + Responses[Answer]); //Answer will be 0,1,2,3 that length of Responses array.
     msg.channel.send(Responses[Answer]);
     msg.react("😄");
-    msg.react("😄");
-    msg.channel.send(
-      "1:" +
-        Math.random() +
-        "2:" +
-        Responses.length +
-        "3:" +
-        Math.random() * Responses.length
-    );
-
+    msg.channel.send(`
+      "random◆"${Math.random()}
+      "length◆"${Responses.length} 
+      "floor◆"${Math.floor(Math.random() * Responses.length)}
+    `);
     return;
   }
+
   //fruit emoji
   if (msg.content === "fruit") {
     msg.react("🍎");
     msg.react("🍊");
     msg.react("🍇");
-    return;
 
-    //msg.react(":poop:");
-    //msg.react('396548322053062656');
-    //const reactionEmoji = client.emojis.cache.get(this.emojiID);
+    console.error("test message:fruit error!");
+    return;
     //msg.react(reactionEmoji);
   }
   if (msg.content === "avatar") {
@@ -159,7 +215,7 @@ client.on("message", msg => {
   }
   if (msg.content === "moji") {
     //syntax highlighting
-    const moji = '```python\n pint("Hellow World")```';
+    const moji = '```javascript\n print("Hellow World")```';
     msg.channel.send(moji);
     console.log(moji.charAt(3) + moji.charAt(4)); // string [0][1][2][3][4]
     console.log(moji.length); // string [0][1][2][3][4]
@@ -181,20 +237,35 @@ client.on("message", msg => {
     });
   }
 
-  if (msg.content === "file") {
+  if (msg.content === "field") {
     //made a form with random color
     var inline = new Boolean(false);
-    var color = 7506394 * Math.random();
+    var color = 1000000 * Math.random(); //7506394
+    var urlID = process.env.URL_ID;
     console.log("color:" + color.valueOf());
     console.log("inline:" + inline.valueOf());
+    console.log("urlID:" + urlID.valueOf());
     //embed fileds
     msg.channel.send({
       embed: {
+        author: {
+          name: "author name ^★click",
+          url: "https://discordapp.com", // nameプロパティのテキストに紐付けられるURL
+          icon_url: urlID
+        },
         color: color,
+        timestamp: new Date(),
+        image: {
+          url: urlID
+        },
+        footer: {
+          icon_url: client.user.avatarURL, //bot's icon
+          text: "©️ example | footer text"
+        },
         fields: [
           {
             name: "field :one:",
-            value: "1つめのfieldだよ",
+            value: "([1つめのfieldだよ](urlID))",
             inline: inline
           },
           {
@@ -259,6 +330,9 @@ if (process.env.DISCORD_BOT_TOKEN == undefined) {
 }
 //DISCORD TOKEN THAT SET IN PROCESS.ENV FILE
 client.login(process.env.DISCORD_BOT_TOKEN);
+
+//VOICE CHANNEL HERE
+//nothing
 
 //FUNCTION HERE
 function sendReply(message, text) {
