@@ -2,6 +2,7 @@ const http = require("http");
 const querystring = require("querystring");
 const discord = require("discord.js");
 const client = new discord.Client(); //the bot
+//const button = new discord.MessageButton();
 
 //HTTP SERVER HRER
 http
@@ -44,8 +45,8 @@ client.on("ready", () => {
 let maps = ["AG", "KURTS", "PX"]; //need put this array to a DATABASE.
 
 //TIMER INTERVAL HERE
-
 var sec = 0;
+var interval = 5000;
 var random = Math.random();
 const timerID = function() {
   //function code here
@@ -55,30 +56,46 @@ const timerID = function() {
       sec +
       " sec up" +
       "\n◆" +
-      Math.random() +
-      "\nmaps:" +
-      maps.length +
-      "\nrandom:" +
-      random
+      maps[Math.floor(Math.random() * maps.length)]
   );
   //client.channels.get(CHANNEL_ID).send("hello world")
   client.channels
     .get(process.env.CHANNEL_ID)
-    .send("◆uptime is " + sec * 10 + " sec" + "\n◆maps:" + maps.length);
+    .send(
+      "◆bot uptime elapsed " +
+        (sec * interval) / 1000 +
+        " sec" +
+        "\n◆maps:" +
+        maps[Math.floor(Math.random() * maps.length)]
+    );
+
+  //if interval is reset mention me
+  if ((sec * interval) / 1000 <= 5) {
+    client.channels
+      .get(process.env.CHANNEL_ID)
+      .send(`"!!--${client.user.tag} reseted"`);
+
+    //memtion member
+
+    //client.user.tag.send("22");
+  }
   //show boss list and time here
   //
   //
-  //test Date.now
+  //calculate the start time and end time.
   const startTime = Date.now();
-  console.log("stating time..." + startTime);
+  console.log("stating time...(UTC):" + startTime);
   setTimeout(() => {
     const millis = Date.now() - startTime;
     console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
-  }, 2000); //every 2sec
+  }, 150000); //every 150sec
 };
-setInterval(timerID, 60000); //every 60sec run function timerID
+//SET INTERVAL TIME
+setInterval(timerID, interval); //every 60sec run function timerID
 
 //LISTEN MESSAGE HERE
+//
+//recive
 client.on("message", msg => {
   //ignore if the message is not form specific channel
   if (msg.channel.id != process.env.BOSS_CHANNEL_ID) {
@@ -93,9 +110,9 @@ client.on("message", msg => {
   //when message noticed,here will send message to another channel
   //and reply the same message...
   //WAIT FOR ONE SECOND
-  console.log("sec[9]:" + sec);
+  //console.log("sec[9]:" + sec);
   var sec = 0;
-  console.log("sec[1]:" + sec);
+  //console.log("sec[1]:" + sec);
   const timerID = setInterval(function() {
     console.log("sec[2]:" + sec);
     sec = sec + 1;
@@ -112,16 +129,37 @@ client.on("message", msg => {
           "』\n" +
           Math.random()
       ); //send message to the channel
-    console.log("sec[4]:" + sec);
-    if (sec >= 10) {
+    // console.log("sec[4]:" + sec);
+    if (sec >= 3) {
       console.log("sec[5]:" + sec);
+
       clearInterval(timerID); //if one sec passed the clear timer
       console.log("sec[6]:" + sec);
     }
-    console.log("sec[7]:" + sec);
+    //console.log("sec[7]:" + sec);
   }, sec * 1000); //wait for 0-4 seconds.
-  console.log("sec[8]:" + sec);
+  //console.log("sec[8]:" + sec);
+  //------
+  if (msg.content.startsWith("ad")) {
+    let mention = msg.mentions.users.first();
+    console.log("mention!!????????????");
+    console.log("★" + mention); //undefined
+    console.log(client.user);
+    console.log(client.member);
+    console.log(msg.member); //undefined
+    console.log(msg.user); //undefined
+    console.log("end-----!!????????????");
+    //msg.channel.send(msg.guild.fetchMember(process.env.USER_ID));
+    msg.reply("AD");
+    msg.channel.send(client.user.tag);
+    msg.channel.send(client.user.username);
+    msg.channel.send(client.user.bot); //is bot
+    msg.channel.send(msg.author.tag);
+    msg.channel.send(msg.author.username);
+    msg.channel.send(msg.author.bot); //is bot
 
+    return;
+  }
   //push pop maps here
   if (msg.content.startsWith("add")) {
     var startTime = Date.now();
@@ -172,6 +210,9 @@ client.on("message", msg => {
     //console.log("PUSH:" + maps.length);
     console.log("maps[]:" + maps.length);
     console.log(maps[0], maps[1], maps[2], maps[3], maps[4]);
+
+    callMe(msg, "what map you want to check?", maps);
+
     //msg.member.roles.cache.map(role=>role.name);
     return;
   }
@@ -196,7 +237,7 @@ client.on("message", msg => {
     <@${msg.author.id}>
     <@&${msg.author.id}>
     Hi,${msg.author}
-    form:${client.users.get(msg.author.id).username}◆!!
+    name:${client.users.get(msg.author.id).username}◆!!
     I am ${client.user.tag}.
     Here is #Channel# ${client.channels.get(process.env.CHANNEL_ID).name}
     `); //send to target channel
@@ -370,6 +411,17 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 //nothing
 
 //FUNCTION HERE
+function callMe(input, output, option) {
+  //maps
+  //input = msg
+  //output = string
+  //option = array
+  var idx = option.indexOf("DK");
+  option.push(idx);
+  //  option.pop(idx + 1);
+
+  input.reply(output).then(input.channel.send(option));
+}
 function sendReply(message, text) {
   message
     .reply(text)
