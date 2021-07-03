@@ -35,7 +35,8 @@ http
   .listen(3000);
 
 //LOGIN CHECK HERE
-client.on("ready", () => {
+client.once("ready", () => {
+  //check ready once, you can use client.on too
   console.log(`Bot ready down! @ ${client.user.tag}`); //show log
   client.user.setPresence({ game: { name: "◆!help" } }); //the bot'status
 });
@@ -112,33 +113,51 @@ client.on("message", msg => {
   //WAIT FOR ONE SECOND
   //console.log("sec[9]:" + sec);
   var sec = 0;
-  //console.log("sec[1]:" + sec);
-  const timerID = setInterval(function() {
-    console.log("sec[2]:" + sec);
-    sec = sec + 1;
-    console.log("sec[3]:" + sec);
-    client.channels
-      .get(process.env.CHANNEL_ID)
-      .send(
-        msg.author +
-          " " +
-          sec +
-          " time◆ " +
-          "\n You said:『" +
-          msg +
-          "』\n" +
-          Math.random()
-      ); //send message to the channel
-    // console.log("sec[4]:" + sec);
-    if (sec >= 3) {
-      console.log("sec[5]:" + sec);
-
-      clearInterval(timerID); //if one sec passed the clear timer
-      console.log("sec[6]:" + sec);
-    }
-    //console.log("sec[7]:" + sec);
-  }, sec * 1000); //wait for 0-4 seconds.
-  //console.log("sec[8]:" + sec);
+  var greet1 = "good mornig";
+  var greet2 = "good night";
+  var greet3 = "good bye";
+  var greet4 = ["nice", "bad", "soso", "excellent"];
+  //when get some message then setInterval,the function is write inside
+  //setInterval(<function name>,3000,<argument>,<argument>,...);
+  //console.log("sec[2]:" + sec); just watching sec moving
+  const timerID = setInterval(
+    function() {
+      console.log("sec[2]:" + sec);
+      console.log("greet1:" + greet1);
+      sec = sec + 1;
+      console.log("sec[3]:" + sec);
+      console.log("greet2:" + greet2);
+      client.channels
+        .get(process.env.CHANNEL_ID)
+        .send(
+          msg.author +
+            " " +
+            sec +
+            " time◆ " +
+            "\nYou said:『" +
+            msg +
+            "』\n" +
+            "greet4:" +
+            greet4[Math.floor(Math.random() * greet4.length)]
+        ); //send message to the channel
+      // console.log("sec[4]:" + sec);
+      if (sec >= 3) {
+        console.log("sec[5]:" + sec);
+        clearInterval(timerID); //if sec>=3 then clear timerID
+        console.log("greet3:" + greet3);
+        console.log("sec[6]:" + sec);
+        console.log("greet4:" + greet4);
+      }
+      console.log("sec[7]:" + sec);
+    },
+    
+    sec * 1000,
+    greet1,
+    greet2,
+    greet3,
+    greet4
+  ); //end of setInterval
+  console.log("sec[8]:" + sec);
   //------
   if (msg.content.startsWith("ad")) {
     let mention = msg.mentions.users.first();
@@ -153,14 +172,15 @@ client.on("message", msg => {
     msg.reply("AD");
     msg.channel.send(client.user.tag);
     msg.channel.send(client.user.username);
-    msg.channel.send(client.user.bot); //is bot
+    msg.channel.send("is bot:"+client.user.bot); //is bot
     msg.channel.send(msg.author.tag);
     msg.channel.send(msg.author.username);
-    msg.channel.send(msg.author.bot); //is bot
+    msg.channel.send("is bot:"+msg.author.bot); //is bot
 
     return;
   }
   //push pop maps here
+  //well,because statsWith("ad"),"add" is not work
   if (msg.content.startsWith("add")) {
     var startTime = Date.now();
     msg.channel.send("msg timestamp:" + msg.createdTimestamp); //created message timestamp
