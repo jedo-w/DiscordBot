@@ -1,1 +1,2 @@
-# a discord bot made by Node.js Discord.js
+# a discord bot made by Discord.js
+# study
