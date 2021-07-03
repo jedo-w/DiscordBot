@@ -70,15 +70,74 @@ const timerID = function() {
         maps[Math.floor(Math.random() * maps.length)]
     );
 
-  //if interval is reset mention me
+  //get channel ID
+  const channelID = client.channels.get(process.env.CHANNEL_ID);
+
+  //if interval reseted then mention me
   if ((sec * interval) / 1000 <= 5) {
-    client.channels
-      .get(process.env.CHANNEL_ID)
-      .send(`"!!--${client.user.tag} reseted"`);
+    //mention <@$bot.id> to see the difference
+    //<@&...> represents a role
+    channelID.send(`!!!-1<@${client.user.id}> reseted`);
+    channelID.send(`!!!-2<@${client.user.tag}> reseted`);
+    channelID.send(`!!!-2<@${client.user.name}> reseted`);
+    channelID.send(`!!!-3<@${client.user}> reseted`);
+    channelID.send(`!!!-4<@${process.env.USER_ID}> reseted`); //the USER ID is me
+    channelID.send(`!!!-5<@&${process.env.USER_ID}> reseted`); //the USER ID is me
+    channelID.send("!!!-6" + client.user.toString());
+    channelID.send("!!!-7" + "<@" + client.user.id + ">");
+    channelID.send("!!!-8" + `<@${process.env.USER_ID.toString()}>`);
+    //use switch
+    var ran = randomMintoMax(0, 2);//function randomMintoMax 0,1,2
+    var textMap = maps[Math.floor(Math.random() * maps.length)];
+    var date = new Date();
+    switch (ran) {
+      case 0:
+        textMap;
+        break;
+      case 1:
+        textMap;
+        break;
+      case 2:
+        textMap = "superman";
+        break;
+        //you can increase case here
+        //***
+    }
+    //embed a picture
+    channelID.send({
+      embed: {
+        author: {
+          name: client.user.tag
+          //url: "https://discordapp.com", // nameプロパティのテキストに紐付けられるURL
+          //icon_url: "https://*****.JPG"
+          //image:url: "https://*****.JPG"
+        },
+        color: 7089780,
+        timestamp: new Date(),
+
+        footer: {
+          icon_url: client.user.avatarURL, //bot's avatar
+          text: "©️ example | bot " + textMap
+        },
+        image: {
+          //url: "https://cdn.discordapp.com/embed/avatars/0.png"
+          url: process.env.URL_ID_no2
+        },
+        fields: [
+          {
+            name: ":weary::weary::weary::weary::weary:",
+            value: "**BOT RESTARED**..."+"\n"+date,
+          }
+        ]
+      }
+    });
+
+    //guild information very long
+    console.log(client.guilds.get(process.env.GUILD_ID));
+    //channels.get(process.env.GUILD_ID).send("guild id");
 
     //memtion member
-
-    //client.user.tag.send("22");
+    //***
   }
   //show boss list and time here
   //
@@ -96,7 +155,7 @@ setInterval(timerID, interval); //every 60sec run function timerID
 
 //LISTEN MESSAGE HERE
 //
-//recive
+//EVENT OF BOT
 client.on("message", msg => {
   //ignore if the message is not form specific channel
   if (msg.channel.id != process.env.BOSS_CHANNEL_ID) {
@@ -150,7 +209,7 @@ client.on("message", msg => {
       }
       console.log("sec[7]:" + sec);
     },
-    
+
     sec * 1000,
     greet1,
     greet2,
@@ -172,10 +231,10 @@ client.on("message", msg => {
     msg.reply("AD");
     msg.channel.send(client.user.tag);
     msg.channel.send(client.user.username);
-    msg.channel.send("is bot:"+client.user.bot); //is bot
+    msg.channel.send("is bot:" + client.user.bot); //is bot
     msg.channel.send(msg.author.tag);
     msg.channel.send(msg.author.username);
-    msg.channel.send("is bot:"+msg.author.bot); //is bot
+    msg.channel.send("is bot:" + msg.author.bot); //is bot
 
     return;
   }
@@ -431,6 +490,11 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 //nothing
 
 //FUNCTION HERE
+function randomMintoMax(min, max) {
+  // returns an int >= min and <= max
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function callMe(input, output, option) {
   //maps
   //input = msg
