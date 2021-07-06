@@ -2,6 +2,11 @@ const http = require("http");
 const querystring = require("querystring");
 const discord = require("discord.js");
 const client = new discord.Client(); //the bot
+const request=require('request'); //request module
+ 
+
+
+
 //const button = new discord.MessageButton();
 
 //HTTP SERVER HRER
@@ -47,7 +52,7 @@ let maps = ["AG", "KURTS", "PX"]; //need put this array to a DATABASE.
 
 //TIMER INTERVAL HERE
 var sec = 0;
-var interval = 5000;
+var interval = 10000;
 var random = Math.random();
 const timerID = function() {
   //function code here
@@ -77,7 +82,7 @@ const timerID = function() {
   if ((sec * interval) / 1000 <= 5) {
     //mention <@$bot.id> to see the difference
     //<@&...> represents a role
-    channelID.send(`!!!-1<@${client.user.id}> reseted`);
+    channelID.send(`!!!-1<@${client.user.id}> sec:${sec},interval:${interval}`);
     channelID.send(`!!!-2<@${client.user.tag}> reseted`);
     channelID.send(`!!!-2<@${client.user.name}> reseted`);
     channelID.send(`!!!-3<@${client.user}> reseted`);
@@ -87,21 +92,21 @@ const timerID = function() {
     channelID.send("!!!-7" + "<@" + client.user.id + ">");
     channelID.send("!!!-8" + `<@${process.env.USER_ID.toString()}>`);
     //use switch
-    var ran = randomMintoMax(0, 2);//function randomMintoMax 0,1,2
+    var ran = randomMintoMax(0, 2); //function randomMintoMax 0,1,2
     var textMap = maps[Math.floor(Math.random() * maps.length)];
     var date = new Date();
     switch (ran) {
       case 0:
-        textMap;
+        textMap; //random maps
         break;
       case 1:
-        textMap;
+        textMap; //random maps
         break;
       case 2:
         textMap = "superman";
         break;
-        //you can increase case here
-        //***
+      //you can increase case here
+      //***
     }
     //embed a picture
     channelID.send({
@@ -112,12 +117,12 @@ const timerID = function() {
           //icon_url: "https://*****.JPG"
           //image:url: "https://*****.JPG"
         },
-        color: 7089780,
+        color: 6089780,
         timestamp: new Date(),
 
         footer: {
           icon_url: client.user.avatarURL, //bot's avatar
-          text: "©️ example | bot " + textMap
+          text: "©️ example | random boss: " + textMap
         },
         image: {
           //url: "https://cdn.discordapp.com/embed/avatars/0.png"
@@ -126,14 +131,14 @@ const timerID = function() {
         fields: [
           {
             name: ":weary::weary::weary::weary::weary:",
-            value: "**BOT RESTARED**..."+"\n"+date,
+            value: "**BOT RESTARED**..." + "\n" + date
           }
         ]
       }
     });
 
     //guild information very long
-    console.log(client.guilds.get(process.env.GUILD_ID));
+    //console.log(client.guilds.get(process.env.GUILD_ID));
     //channels.get(process.env.GUILD_ID).send("guild id");
 
     //memtion member
@@ -148,7 +153,7 @@ const timerID = function() {
   setTimeout(() => {
     const millis = Date.now() - startTime;
     console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
-  }, 150000); //every 150sec
+  }, 10000); //every 150sec
 };
 //SET INTERVAL TIME
 setInterval(timerID, interval); //every 60sec run function timerID
@@ -210,14 +215,29 @@ client.on("message", msg => {
       console.log("sec[7]:" + sec);
     },
 
-    sec * 1000,
-    greet1,
+    sec * 1000, //interval time here
+    greet1, //argument here
     greet2,
     greet3,
     greet4
   ); //end of setInterval
-  console.log("sec[8]:" + sec);
-  //------
+  //console.log("sec[8]:" + sec);
+  
+  //if message indexOf cat then reply >=0, >0
+  if (msg.content.indexOf('cat') >= 0) {
+    msg.reply(msg.content);
+    console.log(msg.content);
+    
+    sendtoGAS(msg);//send to GAS
+    
+  var options = {
+	url:,
+	method: 'POST'
+
+  }
+    
+    return;
+  }
   if (msg.content.startsWith("ad")) {
     let mention = msg.mentions.users.first();
     console.log("mention!!????????????");
@@ -490,6 +510,12 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 //nothing
 
 //FUNCTION HERE
+function sendtoGAS(msg){
+  
+
+  
+  
+}
 function randomMintoMax(min, max) {
   // returns an int >= min and <= max
   return Math.floor(Math.random() * (max - min + 1)) + min;
