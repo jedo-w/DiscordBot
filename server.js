@@ -230,12 +230,7 @@ client.on("message", msg => {
     
     sendtoGAS(msg);//send to GAS
     
-  var options = {
-	url:,
-	method: 'POST'
 
-  }
-    
     return;
   }
   if (msg.content.startsWith("ad")) {
@@ -511,10 +506,7 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 
 //FUNCTION HERE
 function sendtoGAS(msg){
-  
-
-  
-  
+  //***  cat
 }
 function randomMintoMax(min, max) {
   // returns an int >= min and <= max
