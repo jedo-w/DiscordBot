@@ -171,7 +171,7 @@ client.on("message", msg => {
   if (msg.author.id == client.user.id) {
     return;
   }
-  //ignore what?
+  //ignore if it is a bot's message
   if (message.author.bot){ 
     return;
   }
