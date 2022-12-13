@@ -2,11 +2,11 @@ const http = require("http");
 const querystring = require("querystring");
 const discord = require("discord.js");
 const client = new discord.Client(); //the bot
-const request=require('request'); //request module
-const ChatGPT = require('chatgpt'); //add OpenAI chatGPT
-const chatgpt = new ChatGPT(); //create chatGPT, need a API key to active chatGPT.
+//const request = require("request"); //request module
 
 //const button = new discord.MessageButton();
+
+//version:2022.12.14
 
 //HTTP SERVER HRER
 http
@@ -51,7 +51,7 @@ let maps = ["AG", "KURTS", "PX"]; //need put this array to a DATABASE.
 
 //TIMER INTERVAL HERE
 var sec = 0;
-var interval = 10000;
+var interval = 60000;
 var random = Math.random();
 const timerID = function() {
   //function code here
@@ -169,14 +169,6 @@ client.on("message", msg => {
   if (msg.author.id == client.user.id) {
     return;
   }
-  //ignore if it is a bot's message
-  if (message.author.bot){ 
-    return;
-  }
-});
-//bot-token
-client.login(<your-bot-token>);
-
   //TIMER SET INTERVAL
   //just for test to see how sec moving
   //when message noticed,here will send message to another channel
@@ -229,15 +221,14 @@ client.login(<your-bot-token>);
     greet4
   ); //end of setInterval
   //console.log("sec[8]:" + sec);
-  
-  //if message indexOf cat then reply >=0, >0
-  if (msg.content.indexOf('cat') >= 0) {
-    msg.reply(msg.content);
-    console.log(msg.content);
-    
-    sendtoGAS(msg);//send to GAS
-    
 
+  //if message indexOf cat then reply. use >=0 to get cat in any string
+  if (msg.content.indexOf("cat") >= 0) {
+    msg.reply("cat:" + msg.content);
+    console.log(msg.content);
+
+    sendtoGAS(msg); //send message to GAS then reply to bot then bot say to channel.
+    //***
     return;
   }
   if (msg.content.startsWith("ad")) {
@@ -512,7 +503,7 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 //nothing
 
 //FUNCTION HERE
-function sendtoGAS(msg){
+function sendtoGAS(msg) {
   //***  cat
 }
 function randomMintoMax(min, max) {
