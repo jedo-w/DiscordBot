@@ -3,7 +3,8 @@ const querystring = require("querystring");
 const discord = require("discord.js");
 const client = new discord.Client(); //the bot
 const request=require('request'); //request module
- 
+const ChatGPT = require('chatgpt'); //add OpenAI chatGPT
+const chatgpt = new ChatGPT(); //create chatGPT 
 
 
 
@@ -170,6 +171,17 @@ client.on("message", msg => {
   if (msg.author.id == client.user.id) {
     return;
   }
+  //ignore what?
+  if (message.author.bot){ 
+    return;
+  }
+
+  const response = await chatgpt.send(message.content);
+  message.channel.send(response);
+});
+//bot-token
+client.login(<your-bot-token>);
+
   //TIMER SET INTERVAL
   //just for test to see how sec moving
   //when message noticed,here will send message to another channel
