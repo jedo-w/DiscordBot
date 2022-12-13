@@ -4,7 +4,7 @@ const discord = require("discord.js");
 const client = new discord.Client(); //the bot
 const request=require('request'); //request module
 const ChatGPT = require('chatgpt'); //add OpenAI chatGPT
-const chatgpt = new ChatGPT(); //create chatGPT 
+const chatgpt = new ChatGPT(); //create chatGPT, need a API key to active chatGPT.
 
 
 
