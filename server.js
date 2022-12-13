@@ -6,8 +6,6 @@ const request=require('request'); //request module
 const ChatGPT = require('chatgpt'); //add OpenAI chatGPT
 const chatgpt = new ChatGPT(); //create chatGPT, need a API key to active chatGPT.
 
-
-
 //const button = new discord.MessageButton();
 
 //HTTP SERVER HRER
@@ -175,9 +173,6 @@ client.on("message", msg => {
   if (message.author.bot){ 
     return;
   }
-
-  const response = await chatgpt.send(message.content);
-  message.channel.send(response);
 });
 //bot-token
 client.login(<your-bot-token>);
